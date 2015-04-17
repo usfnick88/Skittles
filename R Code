@@ -1,0 +1,302 @@
+Nicholas Marciano - Term Project
+Intro to Computational Statistics
+STA 4102
+
+----------------------------------------------------
+
+library(BSDA)
+library(plotrix)
+library(MASS)
+library(car)
+
+----------------------------------------------------
+
+#I. Location Determination#
+ 
+#A.) Assignment of Locations#
+
+"7E1"<-"7-eleven" #4943 E Busch Blvd#
+"CK1"<-"Circle-K" #12911 Telecom Pkwy N#
+"SS"<-"Seven Star Food Mart" #7749 Temple Terrace Hwy#
+"7E2"<-"7-eleven" #5601 E Fletcher Ave#
+"WC1"<-"Wonder Convenient Store" #8421 N 56th st#
+"CK2"<-"Circle-K" #5602 E Fowler Ave#
+"EL"<-"East Lake Food Market" #8706 Harney Rd#
+"WG"<-"Walgreens" #9202 N 56th St#
+"SF"<-"Snax Food Store" #5002 E Sligh Ave#
+"WA"<-"Wawa" #2901 E Fowler Ave#
+"P1"<-"Publix" #11502 N 53rd St#
+"CVS"<-"CVS Pharmacy" #5502 E Fowler Ave#
+"P2"<-"Publix" #5450 E Busch Blvd#
+"MG1"<-"Marathon Gas" #7105 Temple Terrace Hwy#
+"MF"<-"Mike's Food Store" #6824 N 50th St#
+"MG2"<-"Marathon Gas" #5601 E Fowler Ave#
+"7E3"<-"7-eleven" #10843 N 56th st#
+"M"<-"Mobil" #2928 E Fowler Ave#
+"R"<-"Racetrac" #1251 E Fletcher Ave#
+"7D"<-"Seven Days Food Mart" #8620 Temple Terrace Hwy#
+
+Location<-scan(,what="")
+"7E1" "CK1" "SS" "7E2" "WC1" "CK2" "EL" "WG" "SF" "WA" "P1" "CVS" "P2" "MG1" "MF" "MG2" "7E3" "M" "R" "7D" 
+
+Location
+
+#B.) Random Number Generation#
+
+RNG<-sample(1:20,20,replace=F); RNG
+#First sample was "Rank"#
+Rank<-scan()
+6 9 1 20 8 7 19 5 10 15 14 3 13 4 17 16 18 2 11 12
+
+Rank
+
+#C.) Ordered Data# 
+
+RLSG<-data.frame(Location, Rank); RLSG
+ORLSG<-RLSG[order(Rank),]
+ORLSG
+
+#Visit the first 5 locations determined by the RLSG and purchase 10 bags of regular Skittles#
+
+#Determine the respective counts for each colored Skittles per 2.17 oz bag for each of the 50 bags and organize sample data into an excel spreadsheet#
+
+#Convert excel spreadsheet into a csv file for importing#
+
+#Remove any unnecessary variables#
+
+-------------------------------------------------------------------------------
+
+#II. Data Import#
+
+#A.) Data Import#  
+
+get.wd()
+set.wd("/Users/usfnck88/Import Data/CSV")
+list.files()
+
+mydata<-read.csv("Marciano.data.csv",header=T)
+
+names(mydata)[1]<-"Yellow"
+names(mydata)[2]<-"Orange"
+names(mydata)[3]<-"Green"
+names(mydata)[4]<-"Purple"
+names(mydata)[5]<-"Red"
+
+skittles.data<-data.frame(mydata);skittles.data
+newrow<-data.frame(Yellow=5, Orange=9, Green=15, Purple=14, Red=13)
+skittles.datan<-rbind(skittles.data,newrow);skittles.datan
+
+#III. Display of Data# 
+
+#A.) Bar Charts#
+
+par(mfrow=c(3,2))
+Y<-table(skittles.datan$Yellow);Y
+barplot(Y,ylim=c(0,10),xlab="Amount of Per Package",ylab="Frequency (of Amounts)",main="Frequency Plot\n(Yellow)",border="black",density=20,col="Yellow")
+abline(a=0,b=0,h=0)
+
+R<-table(skittles.datan$Red)
+barplot(R,ylim=c(0,10),xlab="Counts of Per Package",ylab="Frequency (of Counts)",main="Frequency Plot\n(Red)",border="black",density=30,col="Red")
+abline(a=0,b=0,h=0)
+
+O<-table(skittles.datan$Orange)
+barplot(O,ylim=c(0,10),xlab="Counts of Per Package",ylab="Frequency (of Counts)",main="Frequency Plot\n(Orange)",border="black",density=30,col="Orange")
+abline(a=0,b=0,h=0)
+
+P<-table(skittles.datan$Purple)
+barplot(P,ylim=c(0,10),xlab="Counts of Per Package",ylab="Frequency (of Counts)",main="Frequency Plot\n(Purple)",border="black",density=30,col="Purple")
+abline(a=0,b=0,h=0)
+
+G<-table(skittles.datan$Green)
+barplot(G,ylim=c(0,10),xlab="Counts of Per Package",ylab="Frequency (of Counts)",main="Frequency Plot\n(Green)",border="black",density=30,col="Green")
+abline(a=0,b=0,h=0)
+
+#B.) 2D & 3D Pie Charts#
+
+par(mfrow=c(1,1))
+
+lbls<-c("10%","14%","28%","22%","18%","8%")
+pie3D(slices.Y,labels=lbls,main="Pie Chart of Count Frequencies\n(Yellow)",explode=0.1,height=0.05,labelcex=1,radius=1)
+legend("topright", c("[6-8)","[8-10)","[10-12)","[12-14)","[14-16)","[16-18]"), cex=0.8,fill=c("Red","Yellow","Green","Light Blue","Blue","Purple"),title="Legend",horiz=FALSE)
+
+slices.Y<-c(5,7,14,11,9,4)
+pie(slices.Y,main="Pie Chart of Count Frequencies\n(Yellow)",col=c("Red","Yellow","Green","Light Blue","Blue","Purple"),density=30,border="black",labels=c("10%","14%","28%","22%","18%","8%"))
+legend("topright", c("[6-8)","[8-10)","[10-12)","[12-14)","[14-16)","[16-18]"), cex=0.9,density=30,fill=c("Red","Yellow","Green","Light Blue","Blue","Purple"),title="Legend",horiz=FALSE)
+
+par(mfrow=c(1,1))
+
+lbls<-c("2%","16%","16%","22%","22%","18%","16%","4%")
+pie3D(slices.O,labels=lbls,main="Pie Chart of Count Frequencies\n(Orange)",explode=0.1,height=0.05,labelcex=1,radius=1)
+legend("topright", c("[2-4)","[4-6)","[6-8)","[8-10)","[10-12)","[14-16)","[16-18]"), cex=0.9,fill=c("Red","Yellow","Green","Light Blue","Blue","Purple"),title="Legend",horiz=FALSE)
+
+slices.O<-c(1,4,4,11,11,9,8,2)
+lbls<-c("2%","16%","16%","22%","22%","18%","16%","4%")
+pie(slices.O,labels=lbls,main="Pie Chart of Count Frequencies\n(Orange)",col=c("Red","Yellow","Green","Light Green","Light Blue","Blue","Purple","Pink"),density=30,border="black")
+
+------------------------------------------------------------------------------
+
+#III. Tests for Normality# 
+
+#A.) Histograms#
+
+par(mfrow=c(3,2))
+hist(skittles.datan$Red,xlab="Count (Per Bag)",ylab="Frequency (of Counts)", main=paste("Histogram of Red Skittles"),col="Red",xlim=c(0,20),density=30,border="black")
+hist(skittles.datan$Yellow,xlab="Count (Per Bag)",ylab="Frequency (of Counts)", main=paste("Histogram of Yellow Skittles"),col="Yellow",xlim=c(0,20),density=30,border="black")
+hist(skittles.datan$Orange,xlab="Count (Per Bag)",ylab="Frequency (of Counts)", main=paste("Histogram of Orange Skittles"),ylim=c(0,12),col="Orange",xlim=c(0,20),density=30,border="black")
+hist(skittles.datan$Green,xlab="Count (Per Bag)",ylab="Frequency (of Counts)", main=paste("Histogram of Green Skittles"),col="Green",xlim=c(0,20),density=30,border="black")
+hist(skittles.datan$Purple,xlab="Count (Per Bag)",ylab="Frequency (of Counts)", main=paste("Histogram of Purple Skittles"),col="Purple",xlim=c(0,20),ylim=c(0,12),density=30,border="black")
+
+par(mfrow=c(1,1))
+hist(skittles.datan$Orange,xlab="Count (Per Bag)",ylab="Frequency (of Counts)", main=paste("Histogram of Orange Skittle"),xlim=c(0,20),ylim=c(0,14),col="Orange",density=30,border="black")
+text(x=3,y=1.5,cex=2,font=4,col="Blue",labels=c("1"))
+text(x=5,y=4.5,cex=2,font=4,col="Blue",labels=c("4"))
+text(x=7,y=4.5,cex=2,font=4,col="Blue",labels=c("4"))
+text(x=9,y=12.5,cex=2,font=4,col="Blue",labels=c("11"))
+text(x=11,y=11.5,cex=2,font=4,col="Blue",labels=c("11"))
+text(x=13,y=9.5,cex=2,font=4,col="Blue",labels=c("9"))
+text(x=15,y=8.5,cex=2,font=4,col="Blue",labels=c("8"))
+text(x=17,y=2.5,cex=2,font=4,col="Blue",labels=c("2"))
+
+
+#B.) Normal Curve Over Histograms# 
+
+par(mfrow=c(3,2))
+hist(skittles.datan$Yellow,xlab="Count (Per Bag)",ylab="Proportion (of Frequecnies)", main=paste("Normal Curve over Histogram\n(Yellow)"),prob=TRUE, ylim=c(0,0.15), xlim=c(0,25),col="Yellow",density=30,border="black")
+s<-sd(skittles.datan$Yellow);s
+curve(dnorm(x, mean=mean(skittles.datan$Yellow), sd=s), from=0, to=25, col="darkblue", lwd=2, add=TRUE)
+
+hist(skittles.datan$Orange,xlab="Count (Per Bag)",ylab="Proportion (of Frequecnies)", main=paste("Normal Curve over Histogram\n(Orange)"),prob=TRUE, ylim=c(0,0.14), xlim=c(0,25),col="orange",density=30,border="black")
+s<-sd(skittles.datan$Orange);s
+curve(dnorm(x, mean=mean(skittles.datan$Orange), sd=s), from=0, to=25, col="darkblue", lwd=2, add=TRUE)
+
+hist(skittles.datan$Red,xlab="Count (Per Bag)",ylab="Proportion (of Frequecnies)", main=paste("Normal Curve over Histogram\n(Red)"),prob=TRUE, ylim=c(0,0.14), xlim=c(0,25),col="red",density=30,border="black")
+s<-sd(skittles.datan$Red);s
+curve(dnorm(x, mean=mean(skittles.datan$Red), sd=s), from=0, to=25, col="darkblue", lwd=2, add=TRUE)
+
+hist(skittles.datan$Purple,xlab="Count (Per Bag)",ylab="Proportion (of Frequecnies)", main=paste("Normal Curve over Histogram\n(Purple)"),prob=TRUE, ylim=c(0,0.14), xlim=c(0,25),col="Purple",density=30,border="black")
+s<-sd(skittles.datan$Purple);s
+curve(dnorm(x, mean=mean(skittles.datan$Purple), sd=s), from=0, to=25, col="darkblue", lwd=2, add=TRUE)
+
+hist(skittles.datan$Green,xlab="Count (Per Bag)",ylab="Proportion (of Frequecnies)", main=paste("Normal Curve over Histogram\n(Green)"),prob=TRUE, ylim=c(0,0.14), xlim=c(0,25),col="green",density=30,border="black")
+s<-sd(skittles.datan$Green);s
+curve(dnorm(x, mean=mean(skittles.datan$Green), sd=s), from=0, to=25, col="darkblue", lwd=2, add=TRUE,ylab="Proportion (of Count)",xlab="Count (Per Bag)")
+
+#C.) Q-Q Plot#
+ 
+par(mfrow=c(1,1)) 
+
+qqnorm(skittles.datan$Yellow,main="Normal Q-Q Plot\n(Yellow)")
+qqline(skittles.datan$Yellow,col="Yellow2") 	
+
+qqnorm(skittles.datan$Orange,main="Normal Q-Q Plot\n(Orange)")
+qqline(skittles.datan$Orange,col="Orange") 
+
+qqnorm(skittles.datan$Red,main="Normal Q-Q Plot\n(Red)")
+qqline(skittles.datan$Red,col="red") 
+
+qqnorm(skittles.datan$Purple,main="Normal Q-Q Plot\n(Purple)")
+qqline(skittles.datan$Purple,col="purple") 
+
+qqnorm(skittles.datan$Green,main="Normal Q-Q Plot\n(Orange)")
+qqline(skittles.datan$Green,col="green") 
+
+#Sample data appears to lie along the fitted y=x line quite well, which indicates the sample data may follow a normal distribution. Use Shapiro-Wilk Norm Test to be sure#
+
+#D.) Shapiro-Wilk Normality Test#
+
+shapiro.test(skittles.datan$Yellow)
+shapiro.test(skittles.datan$Orange)
+shapiro.test(skittles.datan$Green)
+shapiro.test(skittles.datan$Red)
+shapiro.test(skittles.datan$Purple)
+ 
+ #High p-value indicates that we would not reject the null hypothesis; that is, the population for variables R,O,Y, & P are normally distributed#
+#Low p-value indicates that we would reject the null hypothesis; that is, the population for variable G is likely to not be normally distributed#
+ 
+------------------------------------------------------------------------------
+
+#IV. Paramenter Estimation#
+
+#IV.A.) Descriptive Statistics# 
+
+#A.1.) Point Estimates for Orange#
+
+mean(skittles.datan$Orange)
+var(skittles.datan$Orange)
+sd(skittles.datan$Orange)
+p.hat.O<-28/50;p.hat.O #total proportion of Orange Skittles inclusive to the value range between 9-13#
+q.hat.O<-1-p.hat.O;q.hat.O #total proportion of Orange Skittles exclusive to the value range between 9-13#
+
+sample.parameters.O<-scan()
+11.32 11.24245 3.352976 0.54 0.56
+
+sp.O<-as.data.frame(sample.parameters.O,row.names=c("Mean","Var","Sd","P-hat","Q-hat"))
+t(sp.O)
+
+#IV.D) CI for Point estimates of Orange#
+
+#IV.D.1.) 95 percent Large Sample (n>=30) CI for mu#
+
+n<-length(skittles.datan$Orange);n
+se<-sd(skittles.datan$Orange)/sqrt(n);se
+x.bar<-mean(skittles.datan$Orange);x.bar
+cs<-qnorm(0.975);cs
+E<-cs*se;E
+CI<-x.bar+c(-E,E);CI
+sd<-sd(skittles.datan$Orange)
+
+z.test(x=skittles.datan$Orange,sigma.x=sd,alternative="two.sided",conf.level=0.95)
+
+#IV.E.) Display of CI for mu (Orange)#
+
+par(mfrow=c(1,1))
+
+#IV.E.1) 95% CI for mu (10.10,12.54)##
+
+s<-sd(skittles.datan$Orange);s
+curve(dnorm(x, mean=mean(skittles.datan$Orange), sd=s), from=0, to=25, col="darkblue", lwd=2, add=TRUE,ylab="Proportion (of Count)",xlab="Count (Per Bag)")
+abline(b=0,v=c( 10.39 12.25))
+text(x=11.3,y=0.05,labels="<-CI->",cex=0.8,font=3,col="red")
+text(x=9.3,y=0.03,labels="LL->\n(10.41)",cex=0.8,font=3,col="red")
+text(x=13.4,y=0.03,labels="<-UL\n(12.27)",cex=0.8,font=3,col="red")
+
+------------------------------------------------------------------------------
+
+#V. Hypothesis Testing#
+
+#In a bag of Skittles, according to the Skittles website in 2002, the colors were arranged like this: 
+Green: 19.7% 
+Yellow: 19.5% 
+Orange: 20.2%
+Red: 20%
+Purple: 20.6%.# 
+
+#V.A.) Hypothesis Test for mu (Orange - Large Sample)#
+
+t.test(skittles.datan$Orange,alternative="less",mu=12,conf.level=0.90)
+pwr.t.test(n=50,d=0.20069,type="one.sample",sig.level=0.10,alternative="less")
+power<-0.003584923
+beta<-1-power;beta
+
+t.test(skittles.datan$Orange,alternative="less",mu=12,conf.level=0.95)
+pwr.t.test(n=50,d=0.20069,type="one.sample",sig.level=0.05,alternative="less")
+power<-0.003584923
+beta<-1-power;beta
+
+#V.B.) Pearson Chi-Square Goodness of Fit Test#
+
+skittles.datan
+O<-lapply(skittles.datan,sum);O
+O.F<-as.data.frame(O);O.F
+chisq.test(O.F,p=c(0.20,.202,0.195,0.197,0.206))
+
+P0.E<-scan()
+0.200 0.202 0.195 0.197 0.206
+
+P1.O<-scan()
+0.193 0.192 0.211 0.206 0.199
+
+es<-ES.w1(P0.E,P1.O)
+pwr.chisq.test(e,N=50,df=4,sig.level=0.10)
+power<-0.1105524
+beta<-1-power;beta
